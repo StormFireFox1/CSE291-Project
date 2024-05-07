@@ -1,0 +1,14 @@
+FROM ubuntu:24.04
+
+
+RUN apt-get update && apt-get upgrade -y && \
+  apt-get install -y --no-install-recommends \
+  atop zstd curl hashcat ocl-icd-opencl-dev opencl-headers clinfo libssl-dev ca-certificates
+
+RUN update-ca-certificates
+
+WORKDIR /root
+COPY hashcat-benchmark/benchmark_hashcat /root/benchmark_hashcat
+COPY util/upload_to_s3 /root/upload_to_s3
+
+ENTRYPOINT ["/bin/bash", "-c", "/root/benchmark_hashcat"]

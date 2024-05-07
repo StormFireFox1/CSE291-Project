@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+
+DATE=$(date +%s)
+# Setup logfile for atop and save process for later killing.
+atop -w "hashcat_atop_profile_$DATE.log" -a 5 &
+ATOP_PID=$!
+
+# Track some idle time.
+sleep 5
+
+# Benchmark Hashcat, SHA2-512 hashes.
+hashcat -m 1700 -b >"hashcat_output_$DATE.log"
+
+# Wait for some ramp down.
+sleep 5
+
+# Wait for atop to close log file.
+kill -15 $ATOP_PID
+wait $ATOP_PID
+
+# Save logs and upload to S3.
+FILE="hashcat_profile_$DATE.tar.zst"
+tar -cf - *.log | zstd -o $FILE
+./upload_to_s3 $FILE

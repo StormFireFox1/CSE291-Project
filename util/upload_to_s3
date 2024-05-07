@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+#
+# Send log files to object store.
+# Script modified from https://github.com/kneufeld/minio-put, MIT.
+
+# Check if a file has been passed.
+if [ $# -eq 0 ]; then
+	echo "No file provided!"
+	exit 1
+elif ! [[ -f "$1" ]]; then
+	echo "Did not pass a file!"
+	exit 1
+fi
+
+FILE=$1
+
+HOST="minio.matei.lol"
+S3_KEY="CMn7XfKcY0hxnXfJlHgU"
+S3_SECRET="WIDd7QZmssxLVQD2W7QvNllseKJ1JRdMfKsykBCM"
+BUCKET="cse-291"
+
+BASE_FILE=$(basename ${FILE})
+RESOURCE="/${BUCKET}/${BASE_FILE}"
+CONTENT_TYPE="application/octet-stream"
+UPLOAD_DATE=$(date -R)
+_signature="PUT\n\n${CONTENT_TYPE}\n${UPLOAD_DATE}\n${RESOURCE}"
+SIGNATURE=$(echo -en ${_signature} | openssl sha1 -hmac ${S3_SECRET} -binary | base64)
+
+curl -v -X PUT -T "${FILE}" \
+	-H "Host: $HOST" \
+	-H "Date: ${UPLOAD_DATE}" \
+	-H "Content-Type: ${CONTENT_TYPE}" \
+	-H "Authorization: AWS ${S3_KEY}:${SIGNATURE}" \
+	https://$HOST${RESOURCE}

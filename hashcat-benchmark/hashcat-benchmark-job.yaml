@@ -1,0 +1,12 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: hashcat-benchmark
+spec:
+  template:
+    spec:
+      containers:
+        - name: hashcat-benchmark
+          image: stormfirefox1/cse-291-hashcat-benchmark
+      restartPolicy: Never
+  backoffLimit: 5
