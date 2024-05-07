@@ -1,6 +1,16 @@
 #!/usr/bin/env bash
 
+# Check if argument has been passed.
+if [ $# -eq 0 ]; then
+	echo "No service name passed!"
+	echo "Usage: ./benchmark_hashcat <SERVICE>"
+	exit 1
+fi
+
 DATE=$(date +%s)
+SERVICE=$1
+FILE="hashcat_profile_${SERVICE}_${DATE}.tar.zst"
+
 # Setup logfile for atop and save process for later killing.
 atop -w "hashcat_atop_profile_$DATE.log" -a 5 &
 ATOP_PID=$!
@@ -19,6 +29,5 @@ kill -15 $ATOP_PID
 wait $ATOP_PID
 
 # Save logs and upload to S3.
-FILE="hashcat_profile_$DATE.tar.zst"
 tar -cf - *.log | zstd -o $FILE
 ./upload_to_s3 $FILE
