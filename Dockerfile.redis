@@ -1,0 +1,22 @@
+# Use the official Redis image from Docker Hub
+FROM redis:latest
+
+# Install atop
+RUN apt-get update && \
+    apt-get install -y atop curl ca-certificates libssl-dev procps && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+# Copy the custom Redis configuration file to the container
+COPY redis-benchmark/ecs/redis.conf /usr/local/etc/redis/redis.conf
+
+# Copy the script to start Redis and atop
+COPY redis-benchmark/ecs/start-redis-atop.sh /usr/local/bin/start-redis-atop.sh
+RUN chmod +x /usr/local/bin/start-redis-atop.sh
+
+# Copy the script which helps to upload atop logs to S3
+COPY util/upload_to_s3 /usr/local/bin/upload_to_s3
+COPY redis-benchmark/ecs/stop-and-upload.sh /usr/local/bin/stop-and-upload.sh
+
+# Set the command to run the custom start script
+CMD ["/usr/local/bin/start-redis-atop.sh"]
