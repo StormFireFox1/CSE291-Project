@@ -32,7 +32,7 @@ fi
 echo "[file-write]" >> "$FIO_FILE"
 echo "readwrite=$MODE" >> "$FIO_FILE"
 echo "filename=$FILENAME" >> "$FIO_FILE"
-echo "write_iolog=/home/ubuntu/nfs_logs/$FILENAME-$MODE-io.log" >> "$FIO_FILE"
+echo "write_iolog=$HOME/nfs_logs/$FILENAME-$MODE-io.log" >> "$FIO_FILE"
 echo "size=$SIZE" >> "$FIO_FILE"
 
 if [ "$SYNC" -eq 1 ]; then
