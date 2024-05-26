@@ -9,7 +9,7 @@ fi
 
 SHARED_DIR="$HOME/shared"
 
-rm -rf "/home/ubuntu/nfs_logs/$FILENAME-$MODE-io.log"
+rm -rf "$HOME/nfs_logs/$FILENAME-$MODE-io.log"
 rm -rf "$HOME/$FILENAME-$MODE-fio-result"
 
 IP=$1
