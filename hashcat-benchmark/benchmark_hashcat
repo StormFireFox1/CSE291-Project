@@ -28,6 +28,9 @@ sleep 5
 kill -15 $ATOP_PID
 wait $ATOP_PID
 
+# Convert the atop profile log to JSON file.
+atop -r "hashcat_atop_profile_$DATE.log" -J ALL >"hashcat_atop_profile_$DATE.jsonl"
+
 # Save logs and upload to S3.
 tar -cf - *.log | zstd -o $FILE
 ./upload_to_s3 $FILE
