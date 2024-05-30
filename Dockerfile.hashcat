@@ -11,4 +11,6 @@ WORKDIR /root
 COPY hashcat-benchmark/benchmark_hashcat /root/benchmark_hashcat
 COPY util/upload_to_s3 /root/upload_to_s3
 
-ENTRYPOINT ["/bin/bash", "-c", "/root/benchmark_hashcat"]
+ENV SERVICE=""
+
+ENTRYPOINT /root/benchmark_hashcat "${SERVICE:-ecs}"

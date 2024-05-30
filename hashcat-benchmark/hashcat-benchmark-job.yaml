@@ -8,5 +8,8 @@ spec:
       containers:
         - name: hashcat-benchmark
           image: stormfirefox1/cse-291-hashcat-benchmark
+          env:
+            - name: SERVICE
+              value: eks
       restartPolicy: Never
   backoffLimit: 5
