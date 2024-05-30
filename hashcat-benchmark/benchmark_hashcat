@@ -12,7 +12,7 @@ SERVICE=$1
 FILE="hashcat_profile_${SERVICE}_${DATE}.tar.zst"
 
 # Setup logfile for atop and save process for later killing.
-atop -w "hashcat_atop_profile_$DATE.log" -a 5 &
+atop -w "hashcat_atop_profile_${SERVICE}_${DATE}.log" -a 1 &
 ATOP_PID=$!
 
 # Track some idle time.
@@ -29,8 +29,8 @@ kill -15 $ATOP_PID
 wait $ATOP_PID
 
 # Convert the atop profile log to JSON file.
-atop -r "hashcat_atop_profile_$DATE.log" -J ALL >"hashcat_atop_profile_$DATE.jsonl"
+atop -r "hashcat_atop_profile_${SERVICE}_${DATE}.log" -J ALL >"hashcat_atop_profile_${SERVICE}_${DATE}.jsonl"
 
 # Save logs and upload to S3.
-tar -cf - *.log | zstd -o $FILE
+tar -cf - *.log *.jsonl | zstd -o $FILE
 ./upload_to_s3 $FILE
