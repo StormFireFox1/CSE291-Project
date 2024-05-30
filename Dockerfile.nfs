@@ -1,0 +1,29 @@
+FROM k8s.gcr.io/volume-nfs:0.8
+
+# Install atop and nfs-server
+RUN yum -y makecache && \
+    yum install -y epel-release && \
+    yum install -y atop curl ca-certificates openssl-devel procps && \
+    yum clean all
+
+COPY nfs-benchmark/eks/start-nfs-atop.sh /usr/local/bin/start-nfs-atop.sh
+COPY nfs-benchmark/eks/run_nfs.sh /usr/local/bin/run_nfs.sh
+RUN chmod +x /usr/local/bin/start-nfs-atop.sh /usr/local/bin/run_nfs.sh
+
+RUN mkdir -p /exports
+
+EXPOSE 20048/tcp 2049/tcp 111/tcp
+
+# Copy the script which helps to upload atop logs to S3
+COPY util/upload_to_s3 /usr/local/bin/upload_to_s3
+COPY nfs-benchmark/eks/stop-and-upload.sh /usr/local/bin/stop-and-upload.sh
+
+# Expose volume
+VOLUME /exports
+
+# Launch entrypoint
+ENTRYPOINT ["/usr/local/bin/start-nfs-atop.sh"]
+
+CMD ["/exports"]
+
+

@@ -8,6 +8,7 @@ if [ "$#" -lt 1 ]; then
 fi
 
 SHARED_DIR="$HOME/shared"
+rm -rf $SHARED_DIR
 mkdir $SHARED_DIR
 #umount "$SHARED_DIR"
 sudo mount -t nfs $1:/home/ubuntu/shared $SHARED_DIR
