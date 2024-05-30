@@ -1,12 +1,12 @@
 {
-    "taskDefinitionArn": "arn:aws:ecs:us-west-2:017853670777:task-definition/RedisECS:2",
+    "taskDefinitionArn": "arn:aws:ecs:us-west-2:017853670777:task-definition/RedisECS:6",
     "containerDefinitions": [
         {
             "name": "cse291-redis",
             "image": "maj021/cse291-redis:latest",
-            "cpu": 1024,
-            "memory": 1024,
-            "memoryReservation": 1024,
+            "cpu": 2048,
+            "memory": 4096,
+            "memoryReservation": 4096,
             "portMappings": [
                 {
                     "name": "redis-protocol",
@@ -38,7 +38,7 @@
     "taskRoleArn": "arn:aws:iam::017853670777:role/ecsTaskExecutionRole",
     "executionRoleArn": "arn:aws:iam::017853670777:role/ecsTaskExecutionRole",
     "networkMode": "bridge",
-    "revision": 2,
+    "revision": 6,
     "volumes": [],
     "status": "ACTIVE",
     "requiresAttributes": [
@@ -71,13 +71,13 @@
     "requiresCompatibilities": [
         "EC2"
     ],
-    "cpu": "1024",
-    "memory": "1024",
+    "cpu": "2048",
+    "memory": "4096",
     "runtimePlatform": {
         "cpuArchitecture": "X86_64",
         "operatingSystemFamily": "LINUX"
     },
-    "registeredAt": "2024-05-20T00:03:12.479Z",
+    "registeredAt": "2024-05-30T06:35:48.986Z",
     "registeredBy": "arn:aws:sts::017853670777:assumed-role/OrganizationAccountAccessRole/maj021",
     "tags": []
 }
