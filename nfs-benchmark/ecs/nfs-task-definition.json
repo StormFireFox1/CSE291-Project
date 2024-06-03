@@ -1,0 +1,94 @@
+{
+    "taskDefinitionArn": "arn:aws:ecs:us-west-2:017853670777:task-definition/nfs-server-task:11",
+    "containerDefinitions": [
+        {
+            "name": "nfs-container",
+            "image": "docker.io/tanyasneh/nfs:latest",
+            "cpu": 2048,
+            "memory": 4096,
+            "memoryReservation": 4096,
+            "portMappings": [
+                {
+                    "name": "mount",
+                    "containerPort": 20048,
+                    "hostPort": 20048,
+                    "protocol": "tcp"
+                },
+                {
+                    "name": "nfs",
+                    "containerPort": 2049,
+                    "hostPort": 2049,
+                    "protocol": "tcp"
+                },
+                {
+                    "name": "rpc",
+                    "containerPort": 111,
+                    "hostPort": 111,
+                    "protocol": "tcp"
+                }
+            ],
+            "essential": true,
+            "environment": [],
+            "mountPoints": [],
+            "volumesFrom": [],
+            "privileged": true,
+            "logConfiguration": {
+                "logDriver": "awslogs",
+                "options": {
+                    "awslogs-create-group": "true",
+                    "awslogs-group": "/ecs/nfs-server-task",
+                    "awslogs-region": "us-west-2",
+                    "awslogs-stream-prefix": "ecs"
+                },
+                "secretOptions": []
+            },
+            "systemControls": []
+        }
+    ],
+    "family": "nfs-server-task",
+    "taskRoleArn": "arn:aws:iam::017853670777:role/ecsTaskExecutionRole",
+    "executionRoleArn": "arn:aws:iam::017853670777:role/ecsTaskExecutionRole",
+    "networkMode": "bridge",
+    "revision": 11,
+    "volumes": [],
+    "status": "ACTIVE",
+    "requiresAttributes": [
+        {
+            "name": "com.amazonaws.ecs.capability.logging-driver.awslogs"
+        },
+        {
+            "name": "ecs.capability.execution-role-awslogs"
+        },
+        {
+            "name": "com.amazonaws.ecs.capability.docker-remote-api.1.19"
+        },
+        {
+            "name": "com.amazonaws.ecs.capability.privileged-container"
+        },
+        {
+            "name": "com.amazonaws.ecs.capability.docker-remote-api.1.21"
+        },
+        {
+            "name": "com.amazonaws.ecs.capability.task-iam-role"
+        },
+        {
+            "name": "com.amazonaws.ecs.capability.docker-remote-api.1.29"
+        }
+    ],
+    "placementConstraints": [],
+    "compatibilities": [
+        "EC2"
+    ],
+    "requiresCompatibilities": [
+        "EC2"
+    ],
+    "cpu": "2048",
+    "memory": "4096",
+    "runtimePlatform": {
+        "cpuArchitecture": "X86_64",
+        "operatingSystemFamily": "LINUX"
+    },
+    "registeredAt": "2024-06-03T04:46:22.837Z",
+    "registeredBy": "arn:aws:sts::017853670777:assumed-role/OrganizationAccountAccessRole/tsneh",
+    "tags": []
+}

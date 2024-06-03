@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: nfs-server
-        image: k8s.gcr.io/volume-nfs:0.8 #registry.k8s.io/volume-nfs:0.8
+        image: docker.io/tanyasneh/nfs:latest
         ports:
           - name: nfs
             containerPort: 2049
@@ -53,17 +53,5 @@ spec:
     port: 111
     targetPort: 111
     protocol: TCP
-  # - name: port1tcp
-  #   port: 32768
-  #   targetPort: 32768
-  #   protocol: TCP
-  # - name: port2tcp
-  #   port: 44182
-  #   targetPort: 44182
-  #   protocol: TCP
-  # - name: port3tcp
-  #   port: 54508
-  #   targetPort: 54508
-  #   protocol: TCP
   selector:
     app: nfs-server # must match with the label of NFS pod

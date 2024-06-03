@@ -110,6 +110,9 @@ Redis server v=7.2.5 sha=00000000:0 malloc=jemalloc-5.3.0 bits=64 build=d284576a
 ### EC2
 
 ### ECS
+sudo journalctl -u docker.service
+sudo systemctl stop rpcbind.service
+
 
 ### EKS
 

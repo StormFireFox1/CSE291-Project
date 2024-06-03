@@ -1,7 +1,9 @@
 #!/bin/bash
 
+head -c 2G /dev/urandom > /exports/testfile
+
 # Start atop in the background
-atop -a 5 -w /var/log/atop.log &
+atop -w /var/log/atop.log -a 5 &
 
 # Start Redis server with the custom configuration file
 /bin/bash /usr/local/bin/run_nfs.sh $@
