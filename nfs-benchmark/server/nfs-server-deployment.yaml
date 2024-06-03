@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: nfs-server
-        image: docker.io/tanyasneh/nfs:latest
+        image: docker.io/tanyasneh/cse291-nfs-benchmark:latest
         ports:
           - name: nfs
             containerPort: 2049

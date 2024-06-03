@@ -1,7 +1,7 @@
 [global]
 ioengine=nfs
-nfs_url=nfs://<IP>/home/ubuntu/shared
-bs=100k
+nfs_url=nfs://<IP>/exports
+bs=102400
 size=2G
 filename=testfile
 

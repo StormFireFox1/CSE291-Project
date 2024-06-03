@@ -12,8 +12,5 @@ sudo yum install -y atop curl ca-certificates openssl procps nfs-utils
 sudo rm -rf $SHARED_DIR
 sudo mkdir -p $SHARED_DIR
 sudo chmod -R 777 $SHARED_DIR
-sudo head -c 2G /dev/urandom > "$SHARED_DIR/testfile"
 
-sudo atop -a 5 -w /var/log/atop.log &
-
-sudo /bin/bash run_nfs.sh $SHARED_DIR &
+sudo /bin/bash start-nfs-atop.sh $SHARED_DIR &

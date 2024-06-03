@@ -24,5 +24,5 @@ fio --version
 SHARED_DIR="$HOME/shared"
 sudo mkdir $SHARED_DIR
 sudo mkdir nfs_logs
-sudo mount -t nfs $1:/home/ubuntu/shared $SHARED_DIR
+sudo mount -t nfs $1:/exports $SHARED_DIR
 sudo systemctl status nfs-client.target

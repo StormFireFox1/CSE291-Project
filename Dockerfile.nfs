@@ -6,8 +6,8 @@ RUN yum -y makecache && \
     yum install -y atop curl ca-certificates openssl procps && \
     yum clean all
 
-COPY nfs-benchmark/eks/start-nfs-atop.sh /usr/local/bin/start-nfs-atop.sh
-COPY nfs-benchmark/run_nfs.sh /usr/local/bin/run_nfs.sh
+COPY nfs-benchmark/server/start-nfs-atop.sh /usr/local/bin/start-nfs-atop.sh
+COPY nfs-benchmark/server/run_nfs.sh /usr/local/bin/run_nfs.sh
 RUN chmod +x /usr/local/bin/start-nfs-atop.sh /usr/local/bin/run_nfs.sh
 
 RUN mkdir -p /exports
@@ -15,10 +15,8 @@ RUN mkdir -p /exports
 EXPOSE 20048/tcp 2049/tcp 111/tcp
 
 # Copy the script which helps to upload atop logs to S3
-COPY nfs-benchmark/eks/stop-and-upload.sh /usr/local/bin/stop-and-upload.sh
-
-# Expose volume
-VOLUME /exports
+COPY nfs-benchmark/server/stop-and-upload.sh /usr/local/bin/stop-and-upload.sh
+RUN chmod +x /usr/local/bin/stop-and-upload.sh
 
 # Launch entrypoint
 ENTRYPOINT ["/usr/local/bin/start-nfs-atop.sh"]
