@@ -99,6 +99,8 @@ Redis server v=7.2.5 sha=00000000:0 malloc=jemalloc-5.3.0 bits=64 build=d284576a
 
 ## Hashcat
 
+Hashcat version: 6.2.6+ds1-1build2 (Ubuntu 24.04 LTS package)
+
 ### EC2
 
 1. Create a new EC2 instance with the following specifications:
