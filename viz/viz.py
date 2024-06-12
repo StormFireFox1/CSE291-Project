@@ -62,20 +62,29 @@ services = []
 for kd, vd in data.items():
     services.append(kd)
 for k, v in toplot[services[0]].items():
-    print(k, v)
     data = {}
     max = -math.inf
     for service in services:
+        # yes I know it crashes here but idc cuz it works for the ones we care about
         if len(toplot[service][k]) > max:
             max = len(toplot[service][k])
-    print(type(max), type(truncate))
     max = min(max, truncate)
     for service in services:
         array = [0]*max
         arr = toplot[service][k][1:max] # first data point is fucked for some reason
         array[:len(arr)] = arr
         data[service] = array
-    print(data)
+    if k == "CPU-utime" or k == "CPU-stime":
+        print(k)
+        for service in services:
+            print(service)
+            stime = 0
+            utime = 0
+            time = toplot[service][k][1:max] # first data point is fucked for some reason
+            integral = 0
+            for trap in range(1, len(time)):
+                integral += (time[trap - 1] + time[trap]) / 2
+            print(integral)
     title = f"{app}/{k}"
     name = f"{dir}/{title}.png"
     df = pd.DataFrame(data)
