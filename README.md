@@ -186,7 +186,6 @@ Redis server v=7.2.5 sha=00000000:0 malloc=jemalloc-5.3.0 bits=64 build=d284576a
     ```bash
     $ fio ../job-file --output=fio-results.json --output-format=json
     ```
-6. After benchmarking, stop atop profiling on the server and upload logs to S3 using the `stop-and-upload.sh` script. Also upload the generated fio results generated on the client using the `upload-fio.sh` script.
 7. Terminate the instance.
 
 ### ECS
@@ -195,9 +194,9 @@ Redis server v=7.2.5 sha=00000000:0 malloc=jemalloc-5.3.0 bits=64 build=d284576a
 2. The Dockerfile for the new image is `Dockerfile.nfs`.
 3. The new image is pushed to Dockerhub using the following command:
     ```bash
-    $ docker build -t cse291-nfs-benchmark -f Dockerfile.nfs .
-    $ docker tag cse291-nfs-benchmark <dockerhub-username>/cse291-nfs-benchmark
-    $ docker push <dockerhub-username>/cse291-nfs-benchmark
+    $ docker build -t cse291-nfs-sync -f Dockerfile.nfs .
+    $ docker tag cse291-nfs-benchmark <dockerhub-username>/cse291-nfs-syn
+    $ docker push <dockerhub-username>/cse291-nfs-sync
     ```
 4. Create a new ECS cluster with the following specifications:
     - Cluster Name: nfs-cluster
@@ -212,13 +211,6 @@ Redis server v=7.2.5 sha=00000000:0 malloc=jemalloc-5.3.0 bits=64 build=d284576a
 5. Create a new task definition using the `nfs-benchmark/server/nfs-task-definition.json` configuration file.
 6. Create a new Task using said task definition.
 7. Once the task is deployed, setup any linux host as the client and run the fio benchmark as described in steps 4 and 5 of NFS EC2 section.
-8. After benchmarking, stop atop profiling and upload logs to S3 using `util/stop-and-upload.sh` script on the server. To do this, SSH into the EC2 instance created and run the following command:
-    ```bash
-    $ docker ps
-    $ docker exec -it <CONTAINER-ID> /bin/bash
-    $ /usr/local/bin/stop-and-upload.sh nfs ecs
-    ```
-9. Also upload the generated fio results generated on the client using the `upload-fio.sh` script.
 8. Terminate the ECS cluster. 
 
 ### EKS
@@ -236,29 +228,7 @@ Redis server v=7.2.5 sha=00000000:0 malloc=jemalloc-5.3.0 bits=64 build=d284576a
     ```
 4. Read Loadbalancer ingress from the output of `kubectl describe svc -n storage nfs-service`
 5. Using the captured value as the IP for the server, setup the mount on the client and run the fio benchmark as described in steps 4 and 5 of the NFS EC2 section.
-6. Once the benchmarking is done, stop atop profiling and upload logs to S3 using `util/stop-and-upload.sh` script on the server.
-    ```bash
-    $ kubectl get all -n storage
-    $ kubectl exec -n storage -it <pod-name> -- /bin/bash
-    $ /usr/local/bin/stop-and-upload.sh nfs eks
-    ```
-7. Also upload the generated fio results generated on the client using the `upload-fio.sh` script.
 8. Terminate the cluster.
-
-### Benchmark Results
-
-| Environment    | Random Read Bandwidth   | Sequential Read Bandwidth   |
-|----------------|-------------------------|-----------------------------| 
-| EC2 @ t3.medium| 4607                    | 4620                        |
-| ECS @ t3.medium|                         |                             |
-| EKS @ t3.medium| 4226                    | 4423                        |
-
-
-| Environment    | Random Write Bandwidth   | Sequential Write Bandwidth   |
-|----------------|--------------------------|------------------------------| 
-| EC2 @ t3.medium| 4546                     | 4550                         |
-| ECS @ t3.medium|                          |                              |
-| EKS @ t3.medium| 4544                     | 4533                         |
 
 ## Authors
 

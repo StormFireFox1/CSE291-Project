@@ -1,9 +1,9 @@
 {
-    "taskDefinitionArn": "arn:aws:ecs:us-west-2:017853670777:task-definition/nfs-server-task:11",
+    "taskDefinitionArn": "arn:aws:ecs:us-west-2:017853670777:task-definition/nfs-server-task:15",
     "containerDefinitions": [
         {
             "name": "nfs-container",
-            "image": "docker.io/tanyasneh/nfs:latest",
+            "image": "docker.io/tanyasneh/cse291-nfs-sync:latest",
             "cpu": 2048,
             "memory": 4096,
             "memoryReservation": 4096,
@@ -35,8 +35,8 @@
             "logConfiguration": {
                 "logDriver": "awslogs",
                 "options": {
-                    "awslogs-create-group": "true",
                     "awslogs-group": "/ecs/nfs-server-task",
+                    "awslogs-create-group": "true",
                     "awslogs-region": "us-west-2",
                     "awslogs-stream-prefix": "ecs"
                 },
@@ -49,7 +49,7 @@
     "taskRoleArn": "arn:aws:iam::017853670777:role/ecsTaskExecutionRole",
     "executionRoleArn": "arn:aws:iam::017853670777:role/ecsTaskExecutionRole",
     "networkMode": "bridge",
-    "revision": 11,
+    "revision": 15,
     "volumes": [],
     "status": "ACTIVE",
     "requiresAttributes": [
@@ -88,7 +88,7 @@
         "cpuArchitecture": "X86_64",
         "operatingSystemFamily": "LINUX"
     },
-    "registeredAt": "2024-06-03T04:46:22.837Z",
+    "registeredAt": "2024-06-12T08:20:47.697Z",
     "registeredBy": "arn:aws:sts::017853670777:assumed-role/OrganizationAccountAccessRole/tsneh",
     "tags": []
 }
