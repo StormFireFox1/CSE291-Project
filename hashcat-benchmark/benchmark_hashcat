@@ -28,6 +28,10 @@ sleep 5
 kill -15 $ATOP_PID
 wait $ATOP_PID
 
+# Print out direct hash results from output.
+HASHRATE=$(grep -oE "[0-9]+\.[0-9]+ kH/s" "hashcat_output_$DATE.log")
+echo "Hashrate for $SERVICE: $HASHRATE"
+
 # Convert the atop profile log to JSON file.
 atop -r "hashcat_atop_profile_${SERVICE}_${DATE}.log" -J ALL >"hashcat_atop_profile_${SERVICE}_${DATE}.jsonl"
 

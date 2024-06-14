@@ -80,24 +80,47 @@ Redis server v=7.2.5 sha=00000000:0 malloc=jemalloc-5.3.0 bits=64 build=d284576a
     $ redis-benchmark -h <External-IP> -p 6379 -t set,get -n 1000000 -c 200 -q
     ```
 6. Once the benchmarking is done, stop atop profiling and upload logs to S3 using `util/stop-and-upload.sh` script.
+7. Delete the service and deployment using the following commands:
     ```bash
-    $ kubectl get pods
-    $ kubectl exec -it <pod-name> -- /bin/bash
-    $ /usr/local/bin/stop-and-upload.sh redis eks
+    $ kubectl delete -f redis-benchmark/eks/redis-deployment.yaml
     ```
+8. Delete the NodeGroup and terminate the cluster.
 
+### EKS (Scaling)
 
-### Benchmarking Results
-
-| Environment    | GET Requests per Second | SET Requests per Second |
-|----------------|-------------------------|-------------------------|
-| EC2 @ t2.micro | 4237.79                 | 4186.75                 |
-| EC2 @ t3.medium| 4211.75                 | 4195.14                 |
-| ECS @ t3.medium| 4148.43                 | 4151.13                 |
-| EKS @ t3.medium| 4084.40                 | 3916.81                 |
+1. Create a new EKS cluster with Node Group of 3 `t3.medium` instances.
+2. Grab the CLI/scripting keys from awsed.ucsd.edu and save it into `~/.kubesecrets`
+3. To setup kubectl to talk to the newly created AWS EKS Cluster, run the following commands:
+    ```bash
+    $ source ~/.kubesecrets
+    $ kubectl config set-context arn:aws:iam::017853670777:role/eksClusterRole
+    $ aws eks update-kubeconfig --region us-west-2 --name "ClusterName"
+    $ kubectl get all # Verify it works
+    ```
+4. Test scaling for 4 configurations
+   1. 1 Master: Follow EKS steps of Redis to deploy and jump to step 6
+   2. 1 Master, 1 Slave: Update replicas = 2 and NUM_SHARDS = 1 in `redis-cluster.yaml` 
+   3. 2 Master, 2 Slave: Update replicas = 4 and NUM_SHARDS = 2 in `redis-cluster.yaml` 
+   4. 3 Master, 3 Slave: Update replicas = 6 and NUM_SHARDS = 3 in `redis-cluster.yaml` 
+5. Deploy the redis cluster
+    ```bash
+    $ kubectl apply -f redis-benchmark/eks/redis-cluster.yaml
+    ```
+6. Run benchmarking using the following commands:
+    ```bash
+    $ kubectl exec redis-cluster-0 -- redis-benchmark -p 6379 -t get,set -n 1000000 -c 1000 --cluster -q
+    ```
+7. Save the results and terminate the cluster.
+7. Delete the service and deployment using the following commands:
+    ```bash
+    $ kubectl delete -f redis-benchmark/eks/redis-cluster.yaml
+    ```
+8. Delete the NodeGroup and terminate the cluster.
 
 
 ## Hashcat
+
+Hashcat version: 6.2.6+ds1-1build2 (Ubuntu 24.04 LTS package)
 
 ### EC2
 
@@ -152,14 +175,6 @@ Redis server v=7.2.5 sha=00000000:0 malloc=jemalloc-5.3.0 bits=64 build=d284576a
     ```
 4. The task will automatically run and upload the image to our S3 bucket. Wait for the job to be done with `kubectl wait --for=condition=complete job/hashcat-benchmark`.
 5. Terminate the cluster.
-
-### Benchmark Results
-
-| Environment    | SHA2-512 Hashes/s       |
-|----------------|-------------------------|
-| EC2 @ t3.medium| 16940.9 kH/s            |
-| ECS @ t3.medium| 14171.0 kH/s            |
-| EKS @ t3.medium| 10719.7 kH/s            |
 
 ## NFS
 
@@ -229,6 +244,10 @@ Redis server v=7.2.5 sha=00000000:0 malloc=jemalloc-5.3.0 bits=64 build=d284576a
 4. Read Loadbalancer ingress from the output of `kubectl describe svc -n storage nfs-service`
 5. Using the captured value as the IP for the server, setup the mount on the client and run the fio benchmark as described in steps 4 and 5 of the NFS EC2 section.
 8. Terminate the cluster.
+
+## Results
+
+TODO: Link the results sheet / document here.
 
 ## Authors
 
