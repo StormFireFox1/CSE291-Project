@@ -249,7 +249,7 @@ NFS utils version: 1.3.0-0.21.el7_2.1.x86_64 (CentOS Linux release 7.2.1511 (Cor
 
 ## Results
 
-TODO: Link the results sheet / document here.
+You can find the results documented in this [Google sheet](https://docs.google.com/spreadsheets/d/1C-YwYvtZ4niKX4Bf6JeXrDpab9LT2yOmx15o4GcXSy0/edit?usp=sharing).
 
 ## Authors
 
