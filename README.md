@@ -178,6 +178,8 @@ Hashcat version: 6.2.6+ds1-1build2 (Ubuntu 24.04 LTS package)
 
 ## NFS
 
+NFS utils version: 1.3.0-0.21.el7_2.1.x86_64 (CentOS Linux release 7.2.1511 (Core))
+
 ### EC2
 1. Create a new EC2 instance with the following specifications:
     - AMI: Amazon Linux 2 AMI (HVM) - Kernel 5.10, SSD Volume Type
